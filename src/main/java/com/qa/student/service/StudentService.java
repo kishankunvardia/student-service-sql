@@ -1,12 +1,15 @@
 package com.qa.student.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import com.qa.student.exceptions.StudentAlreadyExistsException;
 import com.qa.student.exceptions.StudentNotFoundException;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qa.student.dto.StudentDto;
 import com.qa.student.entity.Student;
 import com.qa.student.exceptions.StudentAlreadyExistsException;
 import com.qa.student.repository.StudentRepo;
@@ -18,6 +21,9 @@ public class StudentService implements IStudentService{
 	
 	@Autowired
 	StudentRepo sRepository;
+	
+	@Autowired
+	private ModelMapper mapper;
 
 	@Override
 	public Student saveStudent(Student student) throws StudentAlreadyExistsException {
@@ -70,6 +76,16 @@ public class StudentService implements IStudentService{
 			}
 		
 		return status;
+	}
+	
+	private StudentDto mapToDto(Student student) {
+		return this.mapper.map(student, StudentDto.class);
+	}
+
+	@Override
+	public List<StudentDto> getAllStudentDtos() {
+		
+		return this.sRepository.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
 	}
 
 }

@@ -92,5 +92,15 @@ public class StudentController {
 		}		
 		return responseEntity;
 	}
+	
+	@GetMapping("/student/dto")
+	public ResponseEntity<?> getAllStudentsDto() {
+		try {
+			responseEntity = new ResponseEntity<>(sService.getAllStudentDtos(), HttpStatus.OK);
+		} catch(Exception e) {
+			responseEntity = new ResponseEntity<>("An error occurred, please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
 }
 
